@@ -2,8 +2,10 @@ package service
 
 import (
 	"context"
+	models "juggler/internal/app/adapters"
 	"juggler/internal/utils/logger"
 	"math/rand"
+	"slices"
 	"time"
 )
 
@@ -69,21 +71,35 @@ func (s *jugglingService) printBallStates() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	var sortedIDs []int64
+	var statuses []models.BallStatus
+
 	inAir := 0
 	inHand := 0
-	for _, state := range s.ballStates {
+
+	for id, state := range s.ballStates {
 		switch state {
 		case "в полёте":
 			inAir++
 		case "в руках":
 			inHand++
 		}
+		sortedIDs = append(sortedIDs, id)
+	}
+
+	slices.Sort(sortedIDs)
+
+	for _, id := range sortedIDs {
+		statuses = append(statuses, models.BallStatus{
+			ID:    id,
+			State: s.ballStates[id],
+		})
 	}
 
 	logger.Zap.Infow("Текущие состояния мячей",
 		"в_полёте", inAir,
 		"в_руках", inHand,
-		"статусы", s.ballStates,
+		"статусы", statuses,
 	)
 }
 
