@@ -87,7 +87,7 @@ func (s *jugglingService) printBallStates() {
 	)
 }
 
-func (s *jugglingService) StopJuggling() {
+func (s *jugglingService) StopJuggling(cancel context.CancelFunc) {
 	s.wg.Wait()
-	s.cancel()
+	cancel()
 }

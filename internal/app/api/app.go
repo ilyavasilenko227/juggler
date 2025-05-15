@@ -34,5 +34,5 @@ func Run() {
 	}()
 
 	<-jugglingDone
-	processor.StopJuggling()
+	processor.StopJuggling(cancel)
 }
