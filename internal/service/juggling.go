@@ -10,8 +10,7 @@ import (
 )
 
 func (s *jugglingService) StartJuggling(ctx context.Context) error {
-	jugglingDuration := time.Duration(s.config.T) * time.Minute
-	timer := time.NewTimer(jugglingDuration)
+	timer := time.NewTimer(time.Duration(s.config.T) * time.Minute)
 	defer timer.Stop()
 
 	ticker := time.NewTicker(1 * time.Second)
